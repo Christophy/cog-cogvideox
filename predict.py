@@ -26,8 +26,10 @@ class Predictor(BasePredictor):
 
     def setup(self):
         t0 = time()
-        pget_manifest()
-        print("Download weights:", round(time() - t0, 2), "seconds"); t0 = time()
+        # if weights already exist, this will be a no-op
+        if not Path("./weights/glm-4").exists():
+            pget_manifest()
+            print("Download weights:", round(time() - t0, 2), "seconds"); t0 = time()
         self.device = "cuda"
         self.tokenizer = AutoTokenizer.from_pretrained("./weights/glm-4", trust_remote_code=True)
         print("Load tokenizer:", round(time() - t0, 2), "seconds"); t0 = time()
